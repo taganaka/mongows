@@ -32,12 +32,12 @@ module Mongows
       mongo.database_names
     end
 
-    get '/:database/' do
+    get '/:database/?' do
       db = use_database(params[:database]) || halt(404)
       db.collections.map { |e| e.name }
     end
 
-    get '/:database/:collection/' do
+    get '/:database/:collection/?' do
       db = use_database(params[:database]) || halt(404)
       db[params[:collection]].find({}).limit(10).map{ |e| e }
     end
