@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require "mongows"
+Mongows.configure do
+  mongo_uri = "mongodb://localhost"
+end
+Mongows::run nil

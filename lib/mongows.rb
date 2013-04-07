@@ -12,7 +12,3 @@ module Mongows
     Configuration.class_eval(&block)
   end
 end
-Mongows.configure do
-  mongo_uri = "mongodb://localhost"
-end
-Mongows::run nil
