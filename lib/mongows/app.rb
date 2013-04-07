@@ -41,5 +41,11 @@ module Mongows
       db = use_database(params[:database]) || halt(404)
       db[params[:collection]].find({}).limit(10).map{ |e| e }
     end
+
+    get '/:database/:collection/:id/?' do
+      db = use_database(params[:database]) || halt(404)
+      record = db[params[:collection]].find({_id:BSON::ObjectId(params[:id])}).limit(1).first
+      record || halt(404)
+    end
   end
 end
