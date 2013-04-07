@@ -2,6 +2,7 @@
 
 require 'rubygems'
 require 'bundler'
+require './lib/mongows/version'
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -14,11 +15,12 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.version = Mongows::VERSION
   gem.name = "mongows"
   gem.homepage = "http://github.com/taganaka/mongows"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{REST interface for MongoDB}
+  gem.description = %Q{mongows is a REST interface for MongoDB}
   gem.email = "francesco.laurita@gmail.com"
   gem.authors = ["Francesco Laurita"]
   # dependencies defined in Gemfile
@@ -30,14 +32,6 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
-end
-
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
 end
 
 task :default => :test
