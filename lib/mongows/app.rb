@@ -56,22 +56,28 @@ module Mongows
       {}
     end
 
+    # Get the list of collections
     get '/:database/?' do
       db = use_database(params[:database]) || halt(404)
       db.collections.map { |e| e.name }
     end
 
+    # Get items in collection
+    # TODO: add support for selector and for pagination
     get '/:database/:collection/?' do
       db = use_database(params[:database]) || halt(404)
       db[params[:collection]].find({}).limit(10).map{ |e| e }
     end
 
+    # Get an object into a collection by _id
+    # TODO: add support for fields
     get '/:database/:collection/:id/?' do
       db = use_database(params[:database]) || halt(404)
       record = db[params[:collection]].find({_id:BSON::ObjectId(params[:id])}).limit(1).first
       record || halt(404)
     end
 
+    # It creates an object into the collection
     post '/:database/:collection/?' do
       data = JSON.parse(request.body.string)
       halt(500) if data.nil? || !data.kind_of?(Hash)
