@@ -28,8 +28,32 @@ module Mongows
       end
     end
 
+    # Get the list of available databases
     get '/' do
       mongo.database_names
+    end
+
+    # It creates a new database
+    post '/' do
+      db_name = params[:name] || halt(500)
+      if database_exists?(db_name)
+        status 200
+      else
+        mongo.db(db_name).collection_names
+        status 201
+      end
+      {}
+    end
+
+    # It deletes a database
+    delete '/' do
+      db_name = params[:name] || halt(500)
+      if database_exists?(db_name)
+        mongo.drop_database(db_name)
+      else
+        status 500
+      end
+      {}
     end
 
     get '/:database/?' do
@@ -46,6 +70,14 @@ module Mongows
       db = use_database(params[:database]) || halt(404)
       record = db[params[:collection]].find({_id:BSON::ObjectId(params[:id])}).limit(1).first
       record || halt(404)
+    end
+
+    post '/:database/:collection/?' do
+      data = JSON.parse(request.body.string)
+      halt(500) if data.nil? || !data.kind_of?(Hash)
+      db = use_database(params[:database]) || halt(500)
+      db[params[:collection]].insert(data)
+      data
     end
   end
 end
